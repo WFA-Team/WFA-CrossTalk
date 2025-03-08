@@ -29,7 +29,7 @@ public class PublisherImpl implements Publisher {
         properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
 
         logger.info("Creating Kafka producer with bootstrapServers: {}", bootstrapServers);
-        this.producer = new KafkaProducer<>(properties);    // TODO: Investigate and fix
+        this.producer = new KafkaProducer<>(properties);
         this.objectMapper = new ObjectMapper();
     }
 

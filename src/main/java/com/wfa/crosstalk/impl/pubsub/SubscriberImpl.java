@@ -43,7 +43,7 @@ public class SubscriberImpl implements Subscriber {
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
 
         log.info("Creating Kafka consumer with bootstrapServers: {}, groupId: {}", bootstrapServers, groupId);
-        this.consumer = new KafkaConsumer<>(properties);    // TODO: Investigate and fix
+        this.consumer = new KafkaConsumer<>(properties);
         this.executorService = Executors.newSingleThreadExecutor();
     }
 
