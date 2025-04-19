@@ -35,26 +35,28 @@ public class SubscriberImpl implements Subscriber {
     private volatile boolean running = true;
     private boolean started = false;
 
-    public SubscriberImpl(@Value("${com.wfa.crosstalk.pubsub.bootstrapServers}") String bootstrapServers, @Value("${com.wfa.crosstalk.pubsub.groupId}") String groupId) {
+    public SubscriberImpl(@Value("${com.wfa.crosstalk.pubsub.kafkaServer}") String bootstrapServers) {
         Properties properties = new Properties();
         properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        properties.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
+        properties.put(ConsumerConfig.GROUP_ID_CONFIG, "");
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
 
-        log.info("Creating Kafka consumer with bootstrapServers: {}, groupId: {}", bootstrapServers, groupId);
+        log.info("Creating Kafka consumer with bootstrapServers: {}, groupId: {}", bootstrapServers, "");
         this.consumer = new KafkaConsumer<>(properties);
         this.executorService = Executors.newSingleThreadExecutor();
     }
 
     @Override
     public <T> void subscribe(String topic, Class<T> targetType, Consumer<T> messageHandler) {
+        /*  TODO: Update the subscribe logic according to the updated Publisher
         MessageProcessor processor = new Subscription<>(targetType, messageHandler);
         topicToProcessor.put(topic, processor);
         if (!started) {
             started = true;
             executorService.submit(this::pollLoop);
         }
+         */
     }
 
     private void pollLoop() {

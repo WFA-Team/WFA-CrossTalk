@@ -25,7 +25,7 @@ public class TopicManagerImpl implements TopicManager {
     private final AdminClient adminClient;
     private final int adminTimeout;
 
-    public TopicManagerImpl(@Value("${com.wfa.crosstalk.pubsub.bootstrapServers}") String bootstrapServers, @Value("${com.wfa.crosstalk.pubsub.adminTimeout:10}") int adminTimeout) {
+    public TopicManagerImpl(@Value("${com.wfa.crosstalk.pubsub.kafkaServer}") String bootstrapServers, @Value("${com.wfa.crosstalk.pubsub.adminTimeout:10}") int adminTimeout) {
         logger.info("Creating topic manager with bootstrapServers: {}", bootstrapServers);
         this.adminClient = createAdminClient(bootstrapServers);
         this.adminTimeout = adminTimeout;
