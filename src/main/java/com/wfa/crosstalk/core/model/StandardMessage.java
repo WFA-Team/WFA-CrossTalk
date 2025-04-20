@@ -3,8 +3,9 @@ package com.wfa.crosstalk.core.model;
 import java.io.Serializable;
 import java.util.UUID;
 
-public class StandardMessage implements Serializable{
-    private final String messageId;
+public class StandardMessage implements Serializable {
+	private static final long serialVersionUID = -3718746484830543464L;
+	private final String messageId;
     private final long timestamp;
     private final String message;
 

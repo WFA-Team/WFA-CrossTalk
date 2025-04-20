@@ -32,7 +32,7 @@ public class PublisherImpl implements Publisher {
 
     private final CachedSchemaRegistryClient schemaRegistryClient;
 
-    public PublisherImpl(@Value("${com.wfa.crosstalk.pubsub.kafkaServer}") String kafkaServer, @Value("$}") String schemaRegistryUrl) {
+    public PublisherImpl(@Value("${com.wfa.crosstalk.pubsub.kafkaServer}") String kafkaServer, @Value("${com.wfa.crosstalk.pubsub.schemaRegistryUrl}") String schemaRegistryUrl) {
         Properties properties = new Properties();
         properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServer);
         properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
@@ -48,11 +48,12 @@ public class PublisherImpl implements Publisher {
 
     @Override
     public void publish(Map<String, Pair<Object, DataType>> recordData) {
-        String topic = (String) recordData.get(Constants.TOPIC).e1;
-
-        if (topic == null) {
+        if (!recordData.containsKey(Constants.TOPIC)) {
             throw new IllegalArgumentException(Constants.TOPIC + " key must be present in the map");
         }
+        
+        String topic = (String) recordData.get(Constants.TOPIC).e1;
+        
         recordData.remove(Constants.TOPIC);
 
         Schema schema = null;
