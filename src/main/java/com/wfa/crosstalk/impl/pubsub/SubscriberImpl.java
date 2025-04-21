@@ -90,7 +90,7 @@ public class SubscriberImpl implements Subscriber {
 			started = true;
 			consumer.subscribe(Arrays.asList(topic));
 			taskEngine.schedule(getPollingTask());
-			if (taskEngine.getState() != PlayType.STARTED)
+			if (!taskEngine.getState().equals(PlayType.STARTED))
 				taskEngine.startEngine();
 		}
 	}
