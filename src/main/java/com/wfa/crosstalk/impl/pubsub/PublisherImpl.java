@@ -97,7 +97,7 @@ public class PublisherImpl implements Publisher {
                 fields.add(new Schema.Field(entry.getKey(), nullableSchema, null, Schema.Field.NULL_VALUE));
             }
 
-            Schema schema = Schema.createRecord(topic + "_value", null, null, false);
+            Schema schema = Schema.createRecord(HelperMethods.getRecordName(topic), null, null, false);
             schema.setFields(fields);
 
             AvroSchema avroSchema = new AvroSchema(schema);
