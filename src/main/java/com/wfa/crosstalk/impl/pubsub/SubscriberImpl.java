@@ -153,7 +153,7 @@ public class SubscriberImpl implements Subscriber {
 	    	for(Field field: schema.getFields()) {
 	    		String fieldName = field.name();
 	    		Object value = avroRecord.get(fieldName);
-	    		DataType type = ApacheToApplicationDataType(field.schema());
+	    		DataType type = HelperMethods.ApacheToApplicationDataType(field.schema());
 	    		message.put(fieldName, new Pair<Object, DataType>(value, type));
 	    	}
 	    	
@@ -167,24 +167,6 @@ public class SubscriberImpl implements Subscriber {
     	return message;
     }
     
-    private DataType ApacheToApplicationDataType(Schema apacheField) {
-    	Type apacheFieldType = apacheField.getType();
-    	switch (apacheFieldType) {
-    	case Type.UNION:
-    		List<Schema> underlyingSchemas = apacheField.getTypes();
-    		for (Schema schema: underlyingSchemas) {
-    			if (!schema.getType().equals(Type.NULL))
-    				return ApacheToApplicationDataType(schema);
-    		}
-    	case Type.INT:
-    		return DataType.INTEGER;
-    	case Type.DOUBLE:
-    		return DataType.REAL;
-    	default:
-    		return DataType.STRING;
-    	}
-    }
-
     private void stop() {
         running = false;
         consumer.wakeup();
