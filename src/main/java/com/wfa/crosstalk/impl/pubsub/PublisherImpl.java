@@ -1,6 +1,7 @@
 package com.wfa.crosstalk.impl.pubsub;
 
 import com.wfa.crosstalk.core.model.Constants;
+import com.wfa.crosstalk.core.model.HelperMethods;
 import com.wfa.crosstalk.core.pubsub.Publisher;
 import com.wfa.middleware.utils.DataType;
 import com.wfa.middleware.utils.Pair;
@@ -103,9 +104,9 @@ public class PublisherImpl implements Publisher {
 
             logger.info("Created AvroSchema: " + avroSchema.toString());
 
-            if (schemaRegistryClient.getAllSubjects().contains(topic + "_value")) {
-                logger.info("Found existing registered schema for topic: " + topic + "_value");
-                boolean isCompatible = schemaRegistryClient.testCompatibility(topic + "_value", avroSchema);
+            if (schemaRegistryClient.getAllSubjects().contains(HelperMethods.getSchemaName(topic))) {
+                logger.info("Found existing registered schema for topic: " + HelperMethods.getSchemaName(topic));
+                boolean isCompatible = schemaRegistryClient.testCompatibility(HelperMethods.getSchemaName(topic), avroSchema);
                 logger.info("Is current schema compatible with existing schema: " + isCompatible);
                 if (!isCompatible) {
                     throw new RuntimeException("New schema is not compatible with existing schema for topic: " + topic);
@@ -114,7 +115,7 @@ public class PublisherImpl implements Publisher {
 
             // Register schema
             try {
-                schemaRegistryClient.register(topic + "_value", avroSchema);
+                schemaRegistryClient.register(HelperMethods.getSchemaName(topic), avroSchema);
             } catch (Exception e) {
                 throw new RuntimeException("Failed to register schema", e);
             }
