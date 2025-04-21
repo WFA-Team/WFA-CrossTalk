@@ -24,8 +24,10 @@ public class SampleKsqlQuery {
 		
 		ConfigurableApplicationContext ctx = new SpringApplicationBuilder(SampleKsqlQuery.class).properties(properties).run(args);
 		QueryManager queryManager = ctx.getBean(QueryManager.class);
+		
+		queryManager.dropStream("SampleStream").thenAccept(resultDrop -> {
 		queryManager.createStream("SampleStream", "Sample", new HashSet<String>(Arrays.asList("key1", "key2", "key3")))
-			.thenAccept(result-> {queryManager.executeRawQueryRT("SELECT * FROM SampleStream EMIT CHANGES;").thenAccept(streamedQueryResult -> {
+			.thenAccept(resultCreate-> {queryManager.executeRawQueryRT("SELECT * FROM SampleStream EMIT CHANGES;").thenAccept(streamedQueryResult -> {
 	            // Subscribe to the results
 	            streamedQueryResult.subscribe(new Subscriber<Row>() {
 	                private Subscription subscription;
@@ -52,14 +54,17 @@ public class SampleKsqlQuery {
 	                }
 	            });
 	        })
-	        .exceptionally(e -> {
+	        .exceptionally(e1 -> {
 	            // Handle exceptions
-	            e.printStackTrace();
+	            e1.printStackTrace();
 	            return null;
-	        });}).exceptionally(e -> {
+	        });}).exceptionally(e2 -> {
 	            // Handle exceptions
-	            e.printStackTrace();
-	            return null;});
+	            e2.printStackTrace();
+	            return null;});}).exceptionally(e3 -> {
+		            // Handle exceptions
+		            e3.printStackTrace();
+		            return null;});
 		
 	}
 }

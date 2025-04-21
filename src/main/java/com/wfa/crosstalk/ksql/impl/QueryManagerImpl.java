@@ -70,10 +70,10 @@ public class QueryManagerImpl implements QueryManager {
 			List<Field> requestedFields = schema.getFields().stream().filter(field -> FieldNames.contains(field.name())).toList();
 			
 			for (int i = 0; i < requestedFields.size() - 1 ; i++) {
-				query = query + requestedFields.get(i).name() + " " + HelperMethods.ApacheDataTypeToKsqlDataType(schema) + ", ";
+				query = query + requestedFields.get(i).name() + " " + HelperMethods.ApacheDataTypeToKsqlDataType(requestedFields.get(i).schema()) + ", ";
 			}
 			
-			query = query + requestedFields.get(requestedFields.size() - 1).name() + " " + HelperMethods.ApacheDataTypeToKsqlDataType(schema) + " ";
+			query = query + requestedFields.get(requestedFields.size() - 1).name() + " " + HelperMethods.ApacheDataTypeToKsqlDataType(requestedFields.get(requestedFields.size() - 1).schema()) + " ";
 			query = query + ") WITH ( kafka_topic=" + "'" + topic + "'"+", value_format='AVRO' );";
 			
 			return sqlClient.executeStatement(query);
@@ -99,5 +99,11 @@ public class QueryManagerImpl implements QueryManager {
 		Map<String, Object> props = new HashMap<>();
 		props.put("auto.offset.reset", "earliest");
 		return sqlClient.streamQuery(rawQuery, props);
+	}
+	
+	@Override
+	public CompletableFuture<ExecuteStatementResult> dropStream(String streamName) {
+		String query = "DROP STREAM "  + streamName + ";";
+		return sqlClient.executeStatement(query);
 	}
 }

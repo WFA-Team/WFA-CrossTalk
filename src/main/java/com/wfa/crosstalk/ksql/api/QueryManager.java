@@ -11,4 +11,5 @@ public interface QueryManager {
 	public CompletableFuture<ExecuteStatementResult> createStream(String streamName, String topic, Set<String> FieldNames);
 	BatchedQueryResult executeRawQuery(String rawQuery);
 	CompletableFuture<StreamedQueryResult> executeRawQueryRT(String rawQuery);
+	CompletableFuture<ExecuteStatementResult> dropStream(String streamName);
 }
